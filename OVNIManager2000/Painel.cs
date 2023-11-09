@@ -30,6 +30,14 @@ namespace OVNIManager2000
             lblTripulantes.Text = "Tripulantes: " + ovni.QtdTripulantes;
             lblSituacao.Text = "Situação: " + (ovni.Situacao ? "Ligado" : "Desligado");
             lblPlaneta.Text = "Planeta: " + ovni.PlanetaAtual;
+            btnLigar.Enabled = !ovni.Situacao;
+            btnDesligar.Enabled = ovni.Situacao;
+            // Habilitar/desabilitar botões de acordo com a situação:
+            btnAbduzir.Enabled = ovni.Situacao;
+            btnDesabduzir.Enabled = ovni.Situacao;
+            btnMudarPlaneta.Enabled = ovni.Situacao;
+            cmbPlanetas.Enabled = ovni.Situacao;
+            btnOrigem.Enabled = ovni.Situacao;
         }
 
         private void Painel_Load(object sender, EventArgs e)
@@ -37,8 +45,13 @@ namespace OVNIManager2000
 
         }
 
-        private void btbAddTripulante_Click(object sender, EventArgs e)
+        private void btnAddTripulante_Click(object sender, EventArgs e)
         {
+            if(ovni.AdicionarTripulante() == false)
+            {
+                MessageBox.Show("Limite máximo de tripulantes atingido!");
+            }
+            AtualizarDados();
 
         }
 
@@ -46,7 +59,7 @@ namespace OVNIManager2000
         {
             if (ovni.Ligar() == false)
             {
-                MessageBox.Show("A nave já está ligada");
+                MessageBox.Show("A nave já está ligada!");
             }
             AtualizarDados();
         }
@@ -56,7 +69,51 @@ namespace OVNIManager2000
 
             if (ovni.Desligar() == false)
             {
-                MessageBox.Show("A nave já está desligada");
+                MessageBox.Show("A nave já está desligada!");
+            }
+            AtualizarDados();
+        }
+
+        private void btnAbduzir_Click(object sender, EventArgs e)
+        {
+            if (ovni.Situacao)
+            {
+                if (ovni.Abduzir() == false)
+                {
+                    MessageBox.Show("Abduziu d++!");
+                }
+                AtualizarDados();
+            }
+            else
+            {
+                MessageBox.Show("A Nave está desligada!");
+            }
+            AtualizarDados();
+        }
+
+        private void btnDesabduzir_Click(object sender, EventArgs e)
+        {
+            if (ovni.Desabduzir() == false)
+            {
+                MessageBox.Show("Desabduziu de menos!");
+            }
+            AtualizarDados();
+        }
+
+        private void btnOrigem_Click(object sender, EventArgs e)
+        {
+            if (ovni.RetornarAoPlanetaDeOrigem() == false)
+            {
+                MessageBox.Show("Você já está no planeta de origem!");
+            }
+            AtualizarDados();
+        }
+
+        private void btnMudarPlaneta_Click(object sender, EventArgs e)
+        {
+            if (ovni.MudarPlaneta(cmbPlanetas.Text) == false)
+            {
+                MessageBox.Show("Não foi possivel mudar de planeta!");
             }
             AtualizarDados();
         }
